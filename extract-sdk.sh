@@ -1,15 +1,16 @@
 #!/usr/bin/env sh
 
-SDK=platform-tools-latest-linux.zip
+SDK=commandlinetools-linux-11076708_latest.zip
 NDK=android-ndk-r26d-linux.zip
 
-ANDROID_SDK=/tmp/Android/Sdk
-ANDROID_NDK=/tmp/Android/Sdk/ndk
+ANDROID=/tmp/Android
+ANDROID_SDK=$ANDROID/Sdk
+ANDROID_NDK=$ANDROID_SDK/ndk
 
-mkdir /tmp/Android
+mkdir $ANDROID
 
-unzip /tmp/$SDK -d /tmp/Android/ || exit 1
-mv /tmp/Android/platform-tools $ANDROID_SDK || exit 1
+unzip /tmp/$SDK -d $ANDROID
+mv $ANDROID/cmdline-tools $ANDROID_SDK
 
-unzip /tmp/$NDK -d $ANDROID_SDK || exit 1
-mv $ANDROID_SDK/android-ndk-r26d $ANDROID_NDK || exit 1
+unzip /tmp/$NDK -d $ANDROID_SDK
+mv $ANDROID_SDK/android-ndk-r26d $ANDROID_NDK 

@@ -3,7 +3,7 @@ FROM ghcr.io/xtruder/nix-devcontainer:latest
 
 ARG REPO_URL=https://dl.google.com/android/repository
 
-ARG SDK=platform-tools-latest-linux.zip
+ARG SDK=commandlinetools-linux-11076708_latest.zip
 ARG NDK=android-ndk-r26d-linux.zip
 
 ADD --chown=code:code $REPO_URL/$SDK /tmp
