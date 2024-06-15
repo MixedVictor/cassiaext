@@ -2,11 +2,11 @@
 pkgs.mkShell {
   NIX_LD = pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
   nativeBuildInputs = with pkgs; [
-    unzip
     wayland-scanner
     python3
   ];
   depsBuildBuild = with pkgs; [
+    libtool
     ninja
     meson
     pkg-config

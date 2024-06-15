@@ -1,10 +1,9 @@
 # Credits to https://github.com/xtruder/nix-devcontainer :D
 FROM ghcr.io/xtruder/nix-devcontainer:latest
 
-ARG REPO_URL=https://dl.google.com/android/repository
+RUN sudo apt-get install sdkmanager -y
 
-ARG SDK=commandlinetools-linux-11076708_latest.zip
-ARG NDK=android-ndk-r26d-linux.zip
+ARG NDK_VER=26.3.11579264
+ARG BUILD_TOOLS_VER=34.0.0
 
-ADD --chown=code:code $REPO_URL/$SDK /tmp
-ADD --chown=code:code $REPO_URL/$NDK /tmp
+RUN sudo sdkmanager "ndk;$NDK_VER" "build-tools;$BUILD_TOOLS_VER"
