@@ -83,34 +83,66 @@ if (input("Are you sure you want to apply all patches? (y/n) ") != "y"):
 for dep in deps:
     print(f"Applying patches for {dep.name}")
     # Double check that the repository is on the correct tag
-    desc = subprocess.run(["git", "describe", "--exact-match", "--tags"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True)
-    if (desc.returncode != 0):
-        print(f"Error: Failed to get tag for {dep.name}, this could be due to the repository already being patched, it can be reset with reset-deps.py")
-        exit(1)
-    if (desc.stdout.strip() != dep.tag):
-        print(f"Error: {dep.name} is not on the correct tag ({desc.stdout.strip()} != {dep.tag}), run reset-deps.py")
-        exit(1)
 
-    # Ensure there's no uncommitted changes
-    status = subprocess.run(["git", "status", "-uno", "--porcelain=v1"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True)
-    if (status.returncode != 0):
-        print(f"Error: Failed to check status for {dep.name}")
-        exit(1)
-    if (status.stdout != ""):
-        print(f"Error: {dep.name} has uncommitted changes, reset them manually or via reset-deps.py")
-        exit(1)
-
-    for patch in dep.patches:
-        # Apply the patch
-        print(f"Applying patch {patch.name}")
-        if (subprocess.run(["git", "apply", "--ignore-space-change", "--ignore-whitespace", patch.path], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
-            print(f"Error: Failed to apply patch {patch.name}")
+    if (dep.name == "gamescope"):
+        script_dir = os.path.dirname(os.path.realpath("."))
+        desc = subprocess.run(["git", "describe", "--exact-match", "--tags"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True)
+        if (desc.returncode != 0):
+            print(f"Error: Failed to get tag for {dep.name}, this could be due to the repository already being patched, it can be reset with reset-deps.py")
+            exit(1)
+        if (desc.stdout.strip() != dep.tag):
+            print(f"Error: {dep.name} is not on the correct tag ({desc.stdout.strip()} != {dep.tag}), run reset-deps.py")
             exit(1)
 
-    # Commit the changes as a single commit
-    if (subprocess.run(["git", "add", "-A"], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
-        print(f"Error: Failed to add changes for {dep.name}")
-        exit(1)
-    if (subprocess.run(["git", "commit", "-m", f"Apply Cassia patches"], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
-        print(f"Error: Failed to commit changes for {dep.name}")
-        exit(1)
+        # Ensure there's no uncommitted changes
+        status = subprocess.run(["git", "status", "-uno", "--porcelain=v1"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True)
+        if (status.returncode != 0):
+            print(f"Error: Failed to check status for {dep.name}")
+            exit(1)
+
+        for patch in dep.patches:
+            # Apply the patch
+            print(f"Applying patch {patch.name}")
+            if (subprocess.run(["git", "apply", "--ignore-space-change", "--ignore-whitespace", patch.path], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
+                print(f"Error: Failed to apply patch {patch.name}")
+                exit(1)
+
+        # Commit the changes as a single commit
+        if (subprocess.run(["git", "add", "-A"], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
+            print(f"Error: Failed to add changes for {dep.name}")
+            exit(1)
+        if (subprocess.run(["git", "commit", "-m", f"Apply Cassia patches"], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
+            print(f"Error: Failed to commit changes for {dep.name}")
+            exit(1)
+    else:
+        desc = subprocess.run(["git", "describe", "--exact-match", "--tags"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True)
+        if (desc.returncode != 0):
+            print(f"Error: Failed to get tag for {dep.name}, this could be due to the repository already being patched, it can be reset with reset-deps.py")
+            exit(1)
+        if (desc.stdout.strip() != dep.tag):
+            print(f"Error: {dep.name} is not on the correct tag ({desc.stdout.strip()} != {dep.tag}), run reset-deps.py")
+            exit(1)
+
+        # Ensure there's no uncommitted changes
+        status = subprocess.run(["git", "status", "-uno", "--porcelain=v1"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True)
+        if (status.returncode != 0):
+            print(f"Error: Failed to check status for {dep.name}")
+            exit(1)
+        if (status.stdout != ""):
+            print(f"Error: {dep.name} has uncommitted changes, reset them manually or via reset-deps.py")
+            exit(1)
+
+        for patch in dep.patches:
+            # Apply the patch
+            print(f"Applying patch {patch.name}")
+            if (subprocess.run(["git", "apply", "--ignore-space-change", "--ignore-whitespace", patch.path], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
+                print(f"Error: Failed to apply patch {patch.name}")
+                exit(1)
+
+        # Commit the changes as a single commit
+        if (subprocess.run(["git", "add", "-A"], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
+            print(f"Error: Failed to add changes for {dep.name}")
+            exit(1)
+        if (subprocess.run(["git", "commit", "-m", f"Apply Cassia patches"], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
+            print(f"Error: Failed to commit changes for {dep.name}")
+            exit(1)
