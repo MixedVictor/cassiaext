@@ -1,6 +1,6 @@
 [submodule "gamescope"]
 	path = gamescope
-	url = git@github.com:ValveSoftware/gamescope.git
+	url = https://github.com/ValveSoftware/gamescope.git
 [submodule "deps/libx11"]
 	path = deps/libx11
 	url = https://gitlab.freedesktop.org/xorg/lib/libx11.git
@@ -117,7 +117,7 @@
 	url = https://github.com/KhronosGroup/Vulkan-Headers.git
 [submodule "xserver"]
 	path = xserver
-	url = git@github.com:cassia-org/xserver.git
+	url = https://github.com/cassia-org/xserver.git
 [submodule "deps/libxcursor"]
 	path = deps/libxcursor
 	url = https://gitlab.freedesktop.org/xorg/lib/libxcursor.git
