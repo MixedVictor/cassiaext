@@ -38,7 +38,10 @@ with open(os.path.join(script_dir, "README.md"), "r") as readme:
 # Print dependencies
 print("Dependencies:")
 for dep in deps:
-    print(f"* {dep.name} @ {dep.tag}")
+    if (dep.name == "gamescope"):
+        continue
+    else:
+        print(f"* {dep.name} @ {dep.tag}")
 
 # Ask for confirmation
 if (input("Are you sure you want to reset all dependencies? (y/n) ") != "y"):
@@ -46,36 +49,21 @@ if (input("Are you sure you want to reset all dependencies? (y/n) ") != "y"):
 
 # Reset all dependencies
 for dep in deps:
-    print(f"--- Resetting {dep.name} ---")
+    if (dep.name == "gamescope"):
+        continue
+    else:
+        print(f"--- Resetting {dep.name} ---")
+        status = subprocess.run(["git", "status", "-uno", "--porcelain=v1"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True)
+        if (status.returncode != 0):
+            print(f"Error: Failed to check status for {dep.name}")
+            exit(1)
 
-    # Check status to ensure there are no uncommitted changes
-    # if (dep.name == "gamescope"):
-    #     script_dir = os.path.dirname(os.path.realpath("."))
-    #     status = subprocess.run(["git", "status", "-uno", "--porcelain=v1"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True)
-    #     if (status.returncode != 0):
-    #         print(f"Error: Failed to check status for {dep.name}")
-    #         exit(1)
+        if (subprocess.run(["git", "log", "--oneline", f"{dep.tag}..HEAD"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True).returncode != 0):
+            print(f"Error: Failed to list commits for {dep.name}")
+            exit(1)
 
-    #     if (subprocess.run(["git", "log", "--oneline", f"{dep.tag}..HEAD"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True).returncode != 0):
-    #         print(f"Error: Failed to list commits for {dep.name}")
-    #         exit(1)
-
-    #     if (subprocess.run(["git", "reset", "--hard", dep.tag], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
-    #         print(f"Error: Failed to reset {dep.name}")
-    #         exit(1)
-
-    # else:
-    status = subprocess.run(["git", "status", "-uno", "--porcelain=v1"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True)
-    if (status.returncode != 0):
-        print(f"Error: Failed to check status for {dep.name}")
-        exit(1)
-
-    if (subprocess.run(["git", "log", "--oneline", f"{dep.tag}..HEAD"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True).returncode != 0):
-        print(f"Error: Failed to list commits for {dep.name}")
-        exit(1)
-
-    if (subprocess.run(["git", "reset", "--hard", dep.tag], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
-        print(f"Error: Failed to reset {dep.name}")
-        exit(1)
+        if (subprocess.run(["git", "reset", "--hard", dep.tag], stdout=sys.stdout, cwd=os.path.join(script_dir, dep.name)).returncode != 0):
+            print(f"Error: Failed to reset {dep.name}")
+            exit(1)
 
 print("Done")

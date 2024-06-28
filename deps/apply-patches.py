@@ -87,14 +87,13 @@ for dep in deps:
     if (dep.name == "gamescope"):
         script_dir = os.path.dirname(os.path.realpath("."))
         desc = subprocess.run(["git", "describe", "--exact-match", "--tags"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True)
-        if (desc.returncode != 0):
-            print(f"Error: Failed to get tag for {dep.name}, this could be due to the repository already being patched, it can be reset with reset-deps.py")
-            exit(1)
-        if (desc.stdout.strip() != dep.tag):
-            print(f"Error: {dep.name} is not on the correct tag ({desc.stdout.strip()} != {dep.tag}), run reset-deps.py")
-            exit(1)
+        # if (desc.returncode != 0):
+        #     print(f"Error: Failed to get tag for {dep.name}, this could be due to the repository already being patched, it can be reset with reset-deps.py")
+        #     exit(1)
+        # if (desc.stdout.strip() != dep.tag):
+        #     print(f"Error: {dep.name} is not on the correct tag ({desc.stdout.strip()} != {dep.tag}), run reset-deps.py")
+        #     exit(1)
 
-        # Ensure there's no uncommitted changes
         status = subprocess.run(["git", "status", "-uno", "--porcelain=v1"], cwd=os.path.join(script_dir, dep.name), capture_output=True, text=True)
         if (status.returncode != 0):
             print(f"Error: Failed to check status for {dep.name}")

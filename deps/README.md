@@ -48,6 +48,8 @@ Vulkan-Headers - v1.3.269
 libxcursor - libXcursor-1.2.1
 wlroots - 0.17.1
 xkeyboard-config - xkeyboard-config-2.41
+
+gamescope - 3.14.22
 ```
 
 Note: The format of the contents within the codeblock is fixed and depended upon by scripts.
