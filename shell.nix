@@ -6,7 +6,6 @@ pkgs.mkShell {
     python3
   ];
   depsBuildBuild = with pkgs; [
-    libtool
     ninja
     meson
     pkg-config
